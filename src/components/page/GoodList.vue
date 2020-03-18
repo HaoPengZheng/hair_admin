@@ -2,7 +2,7 @@
   <div>
     <div>
       <el-input
-        v-model="params.name"
+        v-model="name"
         placeholder="搜索姓名"
         style="width:300px"
         @blur="doSearch"
@@ -68,6 +68,14 @@
         sortable
       >
       </el-table-column>
+      <el-table-column
+        prop="image"
+        label="image"
+      >
+       <template slot-scope="scope">
+        <img :src="scope.row.image "/>
+      </template>
+      </el-table-column>
     </el-table>
   </div>
 </template>
@@ -78,12 +86,7 @@ export default {
     name: 'good-list',
     data() {
         return {
-            params: {
-                name: '',
-                limit: '20',
-                is_sale: 0,
-                is_order: 0
-            },
+            name:'',
             tableData: [],
             goodData: []
         };
@@ -93,9 +96,15 @@ export default {
     },
     methods: {
         doSearch() {
-            goodlist(this.params).then(res => {
-                this.goodData = res.data.data;
-            });
+          let param = {}
+          if(this.name!=''){
+            param.name = this.name
+          }
+          param.limit = '20'
+
+          goodlist(param).then(res => {
+              this.goodData = res.data.data;
+          });
         }
     }
 };

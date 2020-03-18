@@ -50,6 +50,7 @@ export default {
                     login(this.param).then(res=>{
                         this.$message.success('登录成功');
                         localStorage.setItem('ms_username', this.param.username);
+                        localStorage.setItem('KK-Access-Token',res.token);
                         this.$router.push('/');
                     }).catch(err=>{
                         this.$message.error("账号和密码错误");

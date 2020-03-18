@@ -11,8 +11,14 @@
         icon="el-icon-search"
         circle
         @click="doSearch"
-      ></el-button> 
-
+      ></el-button>
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        :total="total"
+        @current-change="handlePageChange"
+      >
+      </el-pagination>
     </div>
     <el-table
       :data="tableData"
@@ -25,22 +31,51 @@
       >
       </el-table-column>
       <el-table-column
-        prop="name"
-        label="姓名"
+        prop="nickname"
+        label="昵称"
         sortable
       >
       </el-table-column>
-       <el-table-column
-        prop="add_money"
-        label="add_money"
+      <el-table-column
+        prop="gender"
+        label="性别"
+        sortable
+      >
+        <template slot-scope="scope">
+          <div>
+            <el-tag
+              v-if="scope.row.gender == 0"
+              effect="dark"
+              type="danger"
+            >
+              女
+            </el-tag>
+            <el-tag
+              v-if="scope.row.gender == 1"
+              effect="dark"
+            >
+              男
+            </el-tag>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="level.name"
+        label="会员等级"
         sortable
       >
       </el-table-column>
-       <el-table-column
-        prop="discount"
+      <el-table-column
+        prop="level.discount"
         label="折扣"
         sortable
       >
+        <template slot-scope="scope">
+          <span>{{scope.row.level.discount}}折</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作">
+        <el-button type="primary">充值</el-button>
       </el-table-column>
     </el-table>
   </div>
@@ -52,11 +87,13 @@ export default {
     name: 'good-list',
     data() {
         return {
-            params:{
-              phone:'',
-              limit:'20'
+            total: 0,
+            page:1,
+            params: {
+                phone: '',
+                limit: '10'
             },
-            tableData: [],
+            tableData: []
         };
     },
     created() {
@@ -64,14 +101,20 @@ export default {
     },
     methods: {
         doSearch() {
-            let params = {}
-            if(this.params.phone.trim()){
-              params.phone = this.params.phone
+            let params = {};
+            if (this.params.phone.trim()) {
+                params.phone = this.params.phone;
             }
-            params.limit = this.params.limit
+            params.limit = this.params.limit;
+            params.page = this.page
             getUserList(params).then(res => {
-                this.tableData = res.data;
+                this.tableData = res.data.data;
+                this.total = res.data.total;
             });
+        },
+        handlePageChange(page){
+          this.page = page
+          this.doSearch()
         }
     }
 };
