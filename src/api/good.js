@@ -31,3 +31,15 @@ export function consumption(uid,data){
     method:'post'
   })
 }
+
+// 修改服务
+export function updateGoods(id,data){
+  return request({
+    url:`/api/goods/${id}`,
+    method:"patch",
+    headers:{
+      "Content-Type":"application/x-www-form-urlencoded"
+    },
+    data
+  })
+}

@@ -29,6 +29,10 @@
       </el-switch> -->
     </div>
     <el-table
+      v-loading="loading"
+      element-loading-text="拼命加载中"
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(0, 0, 0, 0.8)"
       :data="goodData"
       style="width: 100%"
     >
@@ -85,14 +89,15 @@
 </template>
 
 <script>
-import { goodlist } from '@/api/good';
+import { goodlist,updateGoods } from '@/api/good';
 export default {
     name: 'good-list',
     data() {
         return {
             name:'',
             tableData: [],
-            goodData: []
+            goodData: [],
+            loading: false
         };
     },
     created() {
@@ -132,6 +137,15 @@ export default {
             type: 'warning'
           }).then(() => {
               //点击确定按钮的操作
+              this.loading = true;
+              let param = {}
+              param.is_sale = e.is_sale == 1?0:1
+              updateGoods(e.id,param).then(res=>{
+                        this.$message.success(res.msg);
+                    }).catch(err=>{
+                        this.$message.error("更新异常");
+                    })
+            this.loading = false;
           });
         } 
     }
