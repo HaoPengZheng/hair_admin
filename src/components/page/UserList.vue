@@ -76,6 +76,7 @@
       </el-table-column>
       <el-table-column label="操作">
         <el-button type="primary">充值</el-button>
+        <el-button type="danger">消费</el-button>
       </el-table-column>
     </el-table>
   </div>
