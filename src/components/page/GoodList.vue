@@ -40,42 +40,46 @@
       </el-table-column>
       <el-table-column
         prop="name"
-        label="姓名"
+        label="商品名"
         sortable
       >
       </el-table-column>
-      <el-table-column
-        prop="price_type"
-        label="price_type"
-        sortable
+        <el-table-column
+        prop="image"
+        label="图片"
       >
+       <template slot-scope="scope">
+        <img :src="scope.row.image " style="width:30px"/>
+      </template>
+      </el-table-column>
       </el-table-column>
       <el-table-column
         prop="price"
-        label="price"
+        label="价格"
         sortable
       >
       </el-table-column>
       <el-table-column
-        prop="is_sale"
-        label="is_sale"
+        prop="is_sale_name"
+        label="上下架"
         sortable
       >
       </el-table-column>
       <el-table-column
         prop="is_order"
-        label="is_order"
+        label="是否预约"
         sortable
       >
       </el-table-column>
       <el-table-column
-        prop="image"
-        label="image"
-      >
-       <template slot-scope="scope">
-        <img :src="scope.row.image "/>
+      fixed="right"
+      label="操作"
+      width="100">
+      <template slot-scope="scope">
+        <el-button type="text" size="small">编辑</el-button>
+        <el-button @click="handleClick(scope.row)" type="text" size="small">上下架</el-button>
       </template>
-      </el-table-column>
+    </el-table-column>
     </el-table>
   </div>
 </template>
@@ -103,9 +107,33 @@ export default {
           param.limit = '20'
 
           goodlist(param).then(res => {
+              res.data.data.forEach(item=>{
+                if(item.price_type == 1)
+                {
+                  item.price = "面议";
+                }
+                item.is_sale_name = item.is_sale==1?"上架中":"已下架";
+                item.is_order = item.is_order==1?"可预约":"不可预约";
+              })
               this.goodData = res.data.data;
           });
-        }
+        },
+        handleClick(e)
+        {
+          console.log(e);
+          if(e.is_sale == 1){
+             var msg = "是否下架"+e.name+"?";
+          }else{
+              var msg = "是否上架"+e.name+"？";
+          }
+          this.$confirm(msg, '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+              //点击确定按钮的操作
+          });
+        } 
     }
 };
 </script>
