@@ -15,3 +15,19 @@ export function goodlist(params){
     params
   })
 }
+
+//会员充值接口
+export function pay(uid,data){
+  return request({
+    url:`/api/user/${uid}/user_amount`,
+    method:'post'
+  })
+}
+
+//会员消费接口
+export function consumption(uid,data){
+  return request({
+    url:`/api/user/${uid}/user_amount`,
+    method:'post'
+  })
+}
