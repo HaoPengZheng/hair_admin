@@ -20,7 +20,8 @@ export function goodlist(params){
 export function pay(uid,data){
   return request({
     url:`/api/user/${uid}/user_amount`,
-    method:'post'
+    method:'post',
+    data
   })
 }
 
@@ -28,7 +29,8 @@ export function pay(uid,data){
 export function consumption(uid,data){
   return request({
     url:`/api/user/${uid}/user_amount`,
-    method:'post'
+    method:'post',
+    data
   })
 }
 
