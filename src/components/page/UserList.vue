@@ -66,6 +66,18 @@
       >
       </el-table-column>
       <el-table-column
+        prop="amount.amount"
+        label="余额"
+        sortable
+      >
+      </el-table-column>
+      <el-table-column
+        prop="amount.add_history"
+        label="累计消费"
+        sortable
+      >
+      </el-table-column>
+      <el-table-column
         prop="level.discount"
         label="折扣"
         sortable
@@ -80,7 +92,10 @@
             type="primary"
             @click="showPayDialog(scope.row)"
           >充值</el-button>
-          <el-button type="danger" @click="showConsumptionDialog(scope.row)">消费</el-button>
+          <el-button
+            type="danger"
+            @click="showConsumptionDialog(scope.row)"
+          >消费</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -107,12 +122,13 @@
       </div>
       <el-form :model="payForm">
         <el-input-number
-          v-model="payForm.account"
+          v-model="payForm.count"
           :min="1"
           label="重置金额"
         ></el-input-number>
         <el-input v-model="payForm.remark"></el-input>
       </el-form>
+
       <div
         slot="footer"
         class="dialog-footer"
@@ -124,12 +140,87 @@
         >确 定</el-button>
       </div>
     </el-dialog>
+
+    <!-- 这是消费的弹出框 -->
+    <el-dialog
+      title="会员消费"
+      :visible.sync="consumptionVisible"
+    >
+      <div>
+        <div>
+          姓名：{{this.activeUser&&this.activeUser.name}}
+        </div>
+        <div>
+          微信名：{{this.activeUser&&this.activeUser.nickname}}
+        </div>
+        <div>
+          手机：{{this.activeUser&&this.activeUser.phone}}
+        </div>
+        <div>
+          会员等级：{{this.activeUser&&this.activeUser.level}}
+        </div>
+        <!-- <el-tag type="danger">{{this.activeUser}}</el-tag> -->
+      </div>
+      <el-table
+        :data="saleGoodData"
+        style="width: 100%"
+      >
+        <el-table-column
+          prop="name"
+          label="服务"
+          width="180"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="price"
+          label="单价"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="duration"
+          label="会员价"
+        >
+          <template slot-scope="scope">
+            <span>{{(scope.row.price*scope.row.duration*0.01).toFixed(2)}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="count"
+          label="数量"
+        >
+          <template slot-scope="scope">
+            <el-input-number v-model="scope.row.count"></el-input-number>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-form :model="consumptionForm">
+        其他消费 :
+        <el-input-number
+          v-model="consumptionForm.otherPrice"
+          :min="0"
+          label="消费金额"
+        ></el-input-number>
+      </el-form>
+      <div>
+        总计消费：{{this.consumptionSum}}元
+      </div>
+      <div
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button @click="consumptionVisible = false">取 消</el-button>
+        <el-button
+          type="primary"
+          @click="handleConsuption"
+        >确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { getUserList } from '@/api/member';
-import { pay, consumption } from '@/api/good';
+import { pay, consumption, saleGoodsList } from '@/api/good';
 import { Base64 } from 'js-base64';
 export default {
     name: 'good-list',
@@ -143,20 +234,65 @@ export default {
             },
             tableData: [],
             payFormVisible: false,
-            
+            consumptionVisible: false,
             activeUser: null, //临时存储用户信息
             payForm: {
-                account: 100,
+                count: 100,
                 remark: ''
             },
-            formLabelWidth: '120px'
+            consumptionForm: {
+                goodList: [],
+                otherPrice: 0
+            },
+            formLabelWidth: '120px',
+            saleGoodData: []
         };
     },
     created() {
         this.doSearch();
+        this.getSaleGood();
     },
-    computed() {},
+    computed: {
+        consumptionData() {
+            let data = [];
+            this.saleGoodData.forEach(row => {
+                if (row.count > 0) {
+                    data.push({
+                        id: row.id,
+                        num: row.count,
+                        price: (row.price * row.duration * 0.01).toFixed(2)
+                    });
+                }
+            });
+            return data;
+        },
+        consumptionSum() {
+            let sum = 0;
+            if (this.consumptionData instanceof Array) {
+                this.consumptionData.forEach(data => {
+                    if (!isNaN(data.price)) {
+                        sum += data.num * data.price;
+                    }
+                });
+            }
+            sum += this.consumptionForm.otherPrice;
+            return sum;
+        }
+    },
     methods: {
+        getSaleGood() {
+            saleGoodsList().then(res => {
+                this.saleGoodData = res.data.map(row => {
+                    row.count = 0;
+                    return row;
+                });
+            });
+        },
+        resetGoodCount() {
+            this.saleGoodData.forEach(row => {
+                row.count = 0;
+            });
+        },
         doSearch() {
             let params = {};
             if (this.params.phone.trim()) {
@@ -178,17 +314,25 @@ export default {
             this.activeUser = user;
         },
         handlePay() {
-            let data = { add: { money: this.payForm.account, remark: this.payForm.remark } };
+            let data = { add: { money: this.payForm.count, remark: this.payForm.remark } };
             if (this.activeUser) {
-                pay(this.activeUser.id, { data:Base64.encode(JSON.stringify(data)) }).then(res => {
-                    alert('充值成功')
-                    this.payFormVisible = false
+                pay(this.activeUser.id, { data: Base64.encode(JSON.stringify(data)) }).then(res => {
+                    alert('充值成功');
+                    this.payFormVisible = false;
                 });
             }
         },
-        showConsumptionDialog(user){
-           this.payFormVisible = true;
+        showConsumptionDialog(user) {
+            this.consumptionVisible = true;
             this.activeUser = user;
+        },
+        handleConsuption(){
+          let data = {goods:this.consumptionData}
+          consumption(this.activeUser.id,{ data: Base64.encode(JSON.stringify(data)) }).then(res=>{
+           
+            alert('扣款成功')
+             this.resetGoodCount()
+          })
         }
     }
 };

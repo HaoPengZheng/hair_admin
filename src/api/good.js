@@ -42,3 +42,12 @@ export function updateGoods(id,data){
     data
   })
 }
+
+
+//服务列表
+export function saleGoodsList(){
+  return request({
+    url:`/api/goods/sale`,
+    method:'get',
+  })
+}
