@@ -139,10 +139,20 @@
                 })
                 
                 // this.$message.success('提交成功！');
+            },
+            getParams () {
+                // 取到路由带过来的参数 
+                var routerParams = this.$route.params.id
+                // 将数据放在当前组件的数据内
+                console.log(this.$route.params);
             }
         },
         created(){
             this.cropImg = this.defaultSrc;
+            this.getParams();
+        },
+        mounted:function(){
+            console.log(this.$route.params);
         }
     }
 </script>

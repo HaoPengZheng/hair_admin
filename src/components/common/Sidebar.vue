@@ -92,20 +92,20 @@ export default {
                         },
                     ]
                 },
-                {
-                    icon: 'el-icon-lx-vipcard',
-                    index:'order',
-                    title:'订单管理',
-                    subs:[
-                         {
-                            index: 'addMember',
-                            title: '添加订单'
-                        }, {
-                            index: '',
-                            title: '订单列表'
-                        },
-                    ]
-                },
+            //    {
+            //        icon: 'el-icon-lx-vipcard',
+            //        index:'order',
+            //        title:'订单管理',
+            //        subs:[
+            //             {
+            //                index: 'addMember',
+            //                title: '添加订单'
+            //            }, {
+            //                index: '',
+            //                title: '订单列表'
+            //            },
+            //        ]
+            //    },
             //     {
             //         icon: 'el-icon-lx-cascades',
             //         index: 'table',

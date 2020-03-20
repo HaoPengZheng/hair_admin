@@ -80,7 +80,7 @@
       label="操作"
       width="100">
       <template slot-scope="scope">
-        <el-button type="text" size="small">编辑</el-button>
+        <el-button type="text" size="small" @click="editClick(scope.row)">编辑</el-button>
         <el-button @click="handleClick(scope.row)" type="text" size="small">上下架</el-button>
       </template>
     </el-table-column>
@@ -141,12 +141,24 @@ export default {
               let param = {}
               param.is_sale = e.is_sale == 1?0:1
               updateGoods(e.id,param).then(res=>{
+                        e.is_sale = param.is_sale
+                        e.is_sale_name = e.is_sale==0?"上架中":"已下架";
                         this.$message.success(res.msg);
                     }).catch(err=>{
                         this.$message.error("更新异常");
                     })
             this.loading = false;
+            this.doSearch();
           });
+        },
+        editClick(row){
+          console.log(row);
+          this.$router.push({
+            path:'/addGood',
+            params:{
+              id:1
+            }
+          })
         } 
     }
 };
