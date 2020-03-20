@@ -127,7 +127,11 @@ export default new Router({
                     component: () => import(/* webpackChunkName: "addGood" */ '../components/page/AddUserLevel.vue'),
                     meta: { title: '添加会员等级' }
                 },
-            
+                {
+                    path: '/logs',
+                    component: () => import(/* webpackChunkName: "logs" */ '../components/page/Logs.vue'),
+                    meta: { title: '操作日志' }
+                },
             ]
         },
         {

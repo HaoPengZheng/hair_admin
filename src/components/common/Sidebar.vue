@@ -92,6 +92,11 @@ export default {
                         },
                     ]
                 },
+                {
+                    icon: 'el-icon-lx-cascades',
+                    index: 'logs',
+                    title: '操作日志'
+                 },
             //    {
             //        icon: 'el-icon-lx-vipcard',
             //        index:'order',
