@@ -208,7 +208,7 @@
         slot="footer"
         class="dialog-footer"
       >
-        <el-button @click="consumptionVisible = false">取 消</el-button>
+        <el-button @click="handleConsumptionDialogClose">取 消</el-button>
         <el-button
           type="primary"
           @click="handleConsuption"
@@ -333,6 +333,10 @@ export default {
             alert('扣款成功')
              this.resetGoodCount()
           })
+        },
+        handleConsumptionDialogClose(){
+          this.consumptionVisible = false
+          this.resetGoodCount()
         }
     }
 };
