@@ -53,7 +53,7 @@ export default {
         return {
             query:{
                 page: 1,
-                limit: 5,
+                limit: 50,
                 btime:[]
             },
             tableData: [],

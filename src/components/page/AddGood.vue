@@ -41,12 +41,14 @@
                     <el-form-item label="服务时长">
                         <el-input v-model="form.duration" placeholder="请输入服务时长"></el-input>
                     </el-form-item>
+                    <el-form-item label="设置库存">
+                        <el-input v-model="form.stock" placeholder="请输入库存"></el-input>
+                    </el-form-item>
                     <el-form-item label="是否上架">
                         <el-switch v-model="form.is_sale"></el-switch>
                     </el-form-item>
                     <el-form-item label="是否预约">
                         <el-switch v-model="form.is_order"></el-switch>
-                    </el-form-item>
                     </el-form-item>
                     <el-form-item label="服务简介">
                         <el-input type="textarea" rows="5" v-model="form.desc"></el-input>

@@ -18,7 +18,7 @@ service.interceptors.request.use(config => {
       config.headers['Authorization'] = token
   
     } else {
-      // router.push('/login')
+      router.push('/login')
     }
   
   
