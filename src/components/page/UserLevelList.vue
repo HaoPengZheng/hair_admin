@@ -31,8 +31,8 @@
       >
       </el-table-column>
        <el-table-column
-        prop="add_money"
-        label="add_money"
+        prop="deposit"
+        label="升级充值额度"
         sortable
       >
       </el-table-column>

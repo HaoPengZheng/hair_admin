@@ -7,3 +7,11 @@ export const fetchData = query => {
         params: query
     });
 };
+
+export const staticData = query =>{
+    return request({
+        url: '/api/transStatic',
+        method: 'get',
+        params: query
+    })
+}

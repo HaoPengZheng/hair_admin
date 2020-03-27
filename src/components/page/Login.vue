@@ -44,7 +44,6 @@ export default {
     },
     methods: {
         submitForm() {
-   
             this.$refs.login.validate(valid => {
                 if (valid) {
                     login(this.param).then(res=>{

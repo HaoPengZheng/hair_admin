@@ -8,8 +8,8 @@
                             <div class="grid-content grid-con-1">
                                 <i class="el-icon-lx-people grid-con-icon"></i>
                                 <div class="grid-cont-right">
-                                    <div class="grid-num">1234</div>
-                                    <div>用户访问量</div>
+                                    <div class="grid-num">{{number.users}}</div>
+                                    <div>会员数量</div>
                                 </div>
                             </div>
                         </el-card>
@@ -19,8 +19,8 @@
                             <div class="grid-content grid-con-2">
                                 <i class="el-icon-lx-notice grid-con-icon"></i>
                                 <div class="grid-cont-right">
-                                    <div class="grid-num">321</div>
-                                    <div>系统消息</div>
+                                    <div class="grid-num">{{number.amount}}</div>
+                                    <div>账户余额</div>
                                 </div>
                             </div>
                         </el-card>
@@ -30,31 +30,19 @@
                             <div class="grid-content grid-con-3">
                                 <i class="el-icon-lx-goods grid-con-icon"></i>
                                 <div class="grid-cont-right">
-                                    <div class="grid-num">5000</div>
-                                    <div>数量</div>
+                                    <div class="grid-num">{{number.goods}}</div>
+                                    <div>商品数量</div>
                                 </div>
                             </div>
                         </el-card>
                     </el-col>
                 </el-row>
             </el-col>
-            <el-col :span="8">
-                <el-card shadow="hover" class="mgb20" style="height:252px;">
-                    <div class="user-info">
-                        <img src="../../assets/img/img.jpg" class="user-avator" alt />
-                        <div class="user-info-cont">
-                            <div class="user-info-name">{{name}}</div>
-                            <div>{{role}}</div>
-                        </div>
-                    </div>
-                    <div class="user-info-list">
-                        上次登录时间：
-                        <span>2019-11-01</span>
-                    </div>
-                    <div class="user-info-list">
-                        上次登录地点：
-                        <span>东莞</span>
-                    </div>
+        </el-row>
+         <el-row :gutter="20">
+            <el-col :span="12">
+                <el-card shadow="hover">
+                    <schart ref="line" class="schart" canvasId="line" :options="options"></schart>
                 </el-card>
             </el-col>
         </el-row>
@@ -64,110 +52,31 @@
 <script>
 import Schart from 'vue-schart';
 import bus from '../common/bus';
+import { staticData } from '@/api/index'
 export default {
     name: 'dashboard',
     data() {
         return {
             name: localStorage.getItem('ms_username'),
-            todoList: [
-                {
-                    title: '今天要修复100个bug',
-                    status: false
-                },
-                {
-                    title: '今天要修复100个bug',
-                    status: false
-                },
-                {
-                    title: '今天要写100行代码加几个bug吧',
-                    status: false
-                },
-                {
-                    title: '今天要修复100个bug',
-                    status: false
-                },
-                {
-                    title: '今天要修复100个bug',
-                    status: true
-                },
-                {
-                    title: '今天要写100行代码加几个bug吧',
-                    status: true
-                }
-            ],
-            data: [
-                {
-                    name: '2018/09/04',
-                    value: 1083
-                },
-                {
-                    name: '2018/09/05',
-                    value: 941
-                },
-                {
-                    name: '2018/09/06',
-                    value: 1139
-                },
-                {
-                    name: '2018/09/07',
-                    value: 816
-                },
-                {
-                    name: '2018/09/08',
-                    value: 327
-                },
-                {
-                    name: '2018/09/09',
-                    value: 228
-                },
-                {
-                    name: '2018/09/10',
-                    value: 1065
-                }
-            ],
-            options: {
-                type: 'bar',
-                title: {
-                    text: '最近一周各品类销售图'
-                },
-                xRorate: 25,
-                labels: ['周一', '周二', '周三', '周四', '周五'],
-                datasets: [
-                    {
-                        label: '家电',
-                        data: [234, 278, 270, 190, 230]
-                    },
-                    {
-                        label: '百货',
-                        data: [164, 178, 190, 135, 160]
-                    },
-                    {
-                        label: '食品',
-                        data: [144, 198, 150, 235, 120]
-                    }
-                ]
-            },
-            options2: {
-                type: 'line',
-                title: {
-                    text: '最近几个月各品类销售趋势图'
-                },
-                labels: ['6月', '7月', '8月', '9月', '10月'],
-                datasets: [
-                    {
-                        label: '家电',
-                        data: [234, 278, 270, 190, 230]
-                    },
-                    {
-                        label: '百货',
-                        data: [164, 178, 150, 135, 160]
-                    },
-                    {
-                        label: '食品',
-                        data: [74, 118, 200, 235, 90]
-                    }
-                ]
-            }
+            number:{},
+            options:{}
+            // options: {
+            //     type: 'line',
+            //     title: {
+            //         text: '消费充值趋势'
+            //     },
+            //     labels: ['6月', '7月', '8月', '9月', '10月'],
+            //     datasets: [
+            //         {
+            //             label: '家电',
+            //             data: [234, 278, 270, 190, 230]
+            //         },
+            //         {
+            //             label: '百货',
+            //             data: [164, 178, 150, 135, 160]
+            //         }
+            //     ]
+            // }
         };
     },
     components: {
@@ -178,17 +87,16 @@ export default {
             return this.name === 'admin' ? '超级管理员' : '普通用户';
         }
     },
-    // created() {
-    //     this.handleListener();
-    //     this.changeDate();
-    // },
-    // activated() {
-    //     this.handleListener();
-    // },
-    // deactivated() {
-    //     window.removeEventListener('resize', this.renderChart);
-    //     bus.$off('collapse', this.handleBus);
-    // },
+    created() {
+       this.staticData();
+    },
+    activated() {
+        this.handleListener();
+    },
+    deactivated() {
+        window.removeEventListener('resize', this.renderChart);
+        bus.$off('collapse', this.handleBus);
+    },
     methods: {
         changeDate() {
             const now = new Date().getTime();
@@ -196,21 +104,40 @@ export default {
                 const date = new Date(now - (6 - index) * 86400000);
                 item.name = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
             });
+        },
+        staticData(){
+            staticData().then(
+                res=>{
+                    this.number = res.number;
+                    // this.$set(this.options.labels,res.charts.labels);
+                    // this.$set(this.options.datasets,res.charts.datasets);
+                    this.options = 
+                         {
+                            type: 'line',
+                            title: {
+                                text: '消费充值趋势'
+                            },
+                            labels: res.charts.labels,
+                            datasets: res.charts.datasets
+                        }
+                    console.log(res)
+                }
+            )
+        },
+        handleListener() {
+            bus.$on('collapse', this.handleBus);
+            // 调用renderChart方法对图表进行重新渲染
+            window.addEventListener('resize', this.renderChart);
+        },
+        handleBus(msg) {
+            setTimeout(() => {
+                this.renderChart();
+            }, 200);
+        },
+        renderChart() {
+            this.$refs.bar.renderChart();
+            this.$refs.line.renderChart();
         }
-        // handleListener() {
-        //     bus.$on('collapse', this.handleBus);
-        //     // 调用renderChart方法对图表进行重新渲染
-        //     window.addEventListener('resize', this.renderChart);
-        // },
-        // handleBus(msg) {
-        //     setTimeout(() => {
-        //         this.renderChart();
-        //     }, 200);
-        // },
-        // renderChart() {
-        //     this.$refs.bar.renderChart();
-        //     this.$refs.line.renderChart();
-        // }
     }
 };
 </script>

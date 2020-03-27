@@ -38,3 +38,11 @@ export function updateUser(id,data){
     data
   })
 }
+
+export function getUserTansLog(uid,params){
+  return request({
+    url:`/api/user/${uid}/translog`,
+    method:'get',
+    params
+  })
+}

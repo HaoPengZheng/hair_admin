@@ -1,6 +1,14 @@
 <template>
     <div>
         <div>
+            <el-select v-model="query.good_type" placeholder="请选择分类">
+                <el-option
+                    v-for="item in types"
+                    :key="item.id"
+                    :label="item.type_name"
+                    :value="item.id"
+                ></el-option>
+            </el-select>
             <el-input v-model="name" placeholder="商品名" style="width:300px" @blur="doSearch"></el-input>
             <el-button icon="el-icon-search" circle @click="doSearch"></el-button>
             <!-- <el-switch
@@ -35,6 +43,7 @@
                 </template>
             </el-table-column>
             <el-table-column prop="price" label="价格" sortable></el-table-column>
+            <el-table-column prop="stock" label="库存" sortable></el-table-column>
             <el-table-column prop="is_sale_name" label="上下架" sortable></el-table-column>
             <el-table-column prop="is_order_name" label="是否预约" sortable></el-table-column>
             <el-table-column fixed="right" label="操作" width="100">
@@ -63,6 +72,16 @@
             <el-form ref="form" :model="form" label-width="80px">
                 <el-form-item label="服务名称">
                     <el-input v-model="form.name" placeholder="请输入名称"></el-input>
+                </el-form-item>
+                <el-form-item label="服务分类">
+                    <el-select v-model="form.good_type_name" placeholder="请选择">
+                        <el-option
+                            v-for="item in types"
+                            :key="item.id"
+                            :label="item.type_name"
+                            :value="item.id"
+                        ></el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="服务价格">
                     <el-input
@@ -131,14 +150,15 @@
 </template>
 <script>
 import VueCropper from 'vue-cropperjs';
-import { goodlist, updateGoods } from '@/api/good';
+import { goodlist, updateGoods, getGoodsTypes } from '@/api/good';
 export default {
     name: 'good-list',
     data() {
         return {
             query: {
                 page: 1,
-                limit: 30
+                limit: 30,
+                good_type: ''
             },
             name: '',
             tableData: [],
@@ -151,12 +171,14 @@ export default {
             dialogVisible: false,
             pricedDisplay: true,
             imgSrc: '',
-            defaultSrc: ''
+            defaultSrc: '',
+            types: [] //商品类型
         };
     },
     created() {
         this.doSearch();
         // this.cropImg = this.defaultSrc;
+        this.getGoodType();
     },
     components: {
         VueCropper
@@ -171,8 +193,8 @@ export default {
                 res.data.data.forEach(item => {
                     if (item.price_type == 1) {
                         item.price = '面议';
-                    }else if (item.price_type == 2){
-                      item.price = item.price+"(不显示)";
+                    } else if (item.price_type == 2) {
+                        item.price = item.price + '(不显示)';
                     }
                     if (item.is_sale == 1) {
                         item.is_sale_name = '上架中';
@@ -302,6 +324,12 @@ export default {
         cancelCrop() {
             this.dialogVisible = false;
             this.cropImg = this.defaultSrc;
+        },
+        getGoodType() {
+            getGoodsTypes({}).then(res => {
+                console.log('type', res);
+                this.types = res.data;
+            });
         }
     }
 };

@@ -108,6 +108,11 @@ export default new Router({
                     meta: { title: '服务列表' }
                 },
                 {
+                    path: '/good/type',
+                    component: () => import(/* webpackChunkName: "goodType" */ '../components/page/GoodType.vue'),
+                    meta: { title: '服务类型管理' }
+                },
+                {
                     path: '/addGood',
                     component: () => import(/* webpackChunkName: "addGood" */ '../components/page/AddGood.vue'),
                     meta: { title: '添加服务' }
@@ -128,9 +133,19 @@ export default new Router({
                     meta: { title: '添加会员等级' }
                 },
                 {
+                    path: '/memberConsumption',
+                    component: () => import(/* webpackChunkName: "memberConsumption" */ '../components/page/MemberConsumption.vue'),
+                    meta: { title: '会员消费' }
+                },
+                {
                     path: '/logs',
                     component: () => import(/* webpackChunkName: "logs" */ '../components/page/Logs.vue'),
                     meta: { title: '操作日志' }
+                },
+                {
+                    path: '/translog',
+                    component: () => import(/* webpackChunkName: "translog" */ '../components/page/TransLogs.vue'),
+                    meta: { title: '交易记录' }
                 },
             ]
         },

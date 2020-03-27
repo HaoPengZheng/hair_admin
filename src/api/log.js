@@ -7,3 +7,11 @@ export const logData = query => {
         params: query
     });
 };
+
+export const transLogs = query => {
+    return request({
+        url: '/api/adminTLogs',
+        method: 'get',
+        params: query
+    });
+};

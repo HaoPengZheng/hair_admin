@@ -66,6 +66,10 @@ export default {
                     index:'member',
                     title:'会员管理',
                     subs:[
+                         {
+                            index: '/memberConsumption',
+                            title: '会员消费'
+                        },
                         {
                             index: '/user/level/list',
                             title: '会员等级列表'
@@ -78,23 +82,33 @@ export default {
                         },
                     ]
                 },
-                 {
+                {
                     icon: 'el-icon-lx-goods',
                     index:'goods',
                     title:'服务管理',
                     subs:[
-                         {
+                        {
+                            index: '/good/list',
+                            title: '服务列表'
+                        },
+                        {
                             index: '/addGood',
                             title: '添加服务'
-                        }, {
-                            index: 'good/list',
-                            title: '服务列表'
+                        }, 
+                        {
+                            index: '/good/type',
+                            title: '服务类型管理'
                         },
                     ]
                 },
                 {
+                    icon: 'el-icon-lx-recharge',
+                    index: '/translog',
+                    title: '交易记录'
+                },
+                {
                     icon: 'el-icon-lx-cascades',
-                    index: 'logs',
+                    index: '/logs',
                     title: '操作日志'
                  },
             //    {

@@ -61,7 +61,7 @@
                             type="text"
                             icon="el-icon-edit"
                             @click="handleEdit(scope.$index, scope.row)"
-                        >编辑</el-button>
+                        >编辑</el-button>handleEdit
                         <el-button
                             type="text"
                             icon="el-icon-delete"
